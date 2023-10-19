@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response } from 'express-serve-static-core';
 import { z } from 'zod';
 import { InvalidCredentialError } from '../../../../../application/errors/users/invalid-credential.error';
 import { UserRegisteredWithIdProviderError } from '../../../../../application/errors/users/user-registered-with-id-provider.error';

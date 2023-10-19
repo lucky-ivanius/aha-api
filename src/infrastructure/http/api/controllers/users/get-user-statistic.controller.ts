@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response } from 'express-serve-static-core';
 import { AccessDeniedError } from '../../../../../application/common/errors';
 import {
   GetUserStatisticRequest,

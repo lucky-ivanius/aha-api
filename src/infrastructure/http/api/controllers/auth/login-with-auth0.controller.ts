@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response } from 'express-serve-static-core';
 import { InvalidAccessTokenError } from '../../../../../application/errors/users/invalid-access-token.error';
 import { UserRegisteredWithEmailError } from '../../../../../application/errors/users/user-registered-with-email.error';
 import {

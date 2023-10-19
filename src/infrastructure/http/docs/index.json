@@ -9,16 +9,24 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3001/api/v1",
-      "description": "Local Development Server"
+      "url": "https://{url}/api/v1",
+      "description": "Production Server",
+      "variables": {
+        "url": {
+          "default": "https://aha-api-kappa.vercel.app/",
+          "description": "Production URL"
+        }
+      }
     },
     {
-      "url": "https://staging.example.com/api/v1",
-      "description": "Staging Server"
-    },
-    {
-      "url": "https://api.example.com/api/v1",
-      "description": "Production Server"
+      "url": "http://localhost:${port}/api/v1",
+      "description": "Local Development Server",
+      "variables": {
+        "port": {
+          "default": "3001",
+          "description": "Production URL"
+        }
+      }
     }
   ],
   "tags": [

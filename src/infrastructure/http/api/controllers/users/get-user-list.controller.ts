@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response } from 'express-serve-static-core';
 import { z } from 'zod';
 import { AccessDeniedError } from '../../../../../application/common/errors';
 import {

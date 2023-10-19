@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express-serve-static-core';
 import { SessionsRepository } from '../../../../../domain/repositories/sessions.repository';
 import { TokenService } from '../../../../../domain/services/token.service';
 import { Auth0Service } from '../../../../services/implementations/auth0.service';

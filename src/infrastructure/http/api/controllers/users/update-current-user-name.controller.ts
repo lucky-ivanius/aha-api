@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response } from 'express-serve-static-core';
 import { NotFoundError } from '../../../../../application/common/errors';
 import {
   UpdateNameRequest,

@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response } from 'express-serve-static-core';
 
 export abstract class Controller {
   protected abstract executeImpl(req: Request, res: Response): Promise<unknown>;

@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response } from 'express-serve-static-core';
 import { z } from 'zod';
 import { NotFoundError } from '../../../../../application/common/errors';
 import { InvalidAccessTokenError } from '../../../../../application/errors/users/invalid-access-token.error';

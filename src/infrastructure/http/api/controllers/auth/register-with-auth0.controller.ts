@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response } from 'express-serve-static-core';
 import { EmailAlreadyExistsError } from '../../../../../application/errors/users/email-already-exists.error';
 import { InvalidAccessTokenError } from '../../../../../application/errors/users/invalid-access-token.error';
 import {
