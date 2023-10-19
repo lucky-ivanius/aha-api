@@ -70,7 +70,7 @@ export class RegisterUseCase
 
       const verifyToken = this.tokenService.sign(verifyEmailPayload);
 
-      this.emailService.sendWithTemplate(
+      await this.emailService.sendWithTemplate(
         userResult.data.email.value,
         'verifyEmail',
         {
