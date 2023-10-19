@@ -5,7 +5,7 @@ import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { apiConfig } from '../../config/api.config';
-import { swaggerServe, swaggerSetup } from './routes/docs';
+import { docsRouter } from './routes/docs';
 import { router as v1 } from './routes/v1';
 
 const corsOptions: CorsOptions = {
@@ -28,9 +28,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/v1', v1);
-
-app.use('/api/docs', swaggerServe);
-app.get('/api/docs', swaggerSetup);
+app.use('/api/docs', docsRouter);
 
 const port = apiConfig.port;
 
