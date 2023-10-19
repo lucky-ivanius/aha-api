@@ -20,8 +20,7 @@ app
   .use(cors(corsOptions))
   .use(compression())
   .use(helmet())
-  .use(morgan('dev'))
-  .use(express.static(__dirname));
+  .use(morgan('dev'));
 
 app.get('/', (req, res) => {
   return res.json({ message: 'Hi 💕' });
