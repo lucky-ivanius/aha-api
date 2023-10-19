@@ -4,6 +4,7 @@ import {
   getUserListController,
   getUserStatisticController,
   updateCurrentUserNameController,
+  verifyEmailController,
 } from '../../../controllers';
 import { authMiddleware } from '../../../middlewares';
 
@@ -31,6 +32,10 @@ usersRouter.get(
   '/stats',
   async (req, res, next) => authMiddleware.execute(req, res, next),
   async (req, res) => getUserStatisticController.execute(req, res)
+);
+
+usersRouter.get('/verify', async (req, res) =>
+  verifyEmailController.execute(req, res)
 );
 
 export { usersRouter };

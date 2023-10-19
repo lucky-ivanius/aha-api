@@ -7,6 +7,7 @@ import { loginUseCase } from '../../../use-cases/users/login.use-case';
 import { registerWithAuth0UseCase } from '../../../use-cases/users/register-with-auth0-use-case.impl';
 import { registerUseCase } from '../../../use-cases/users/register.use-case';
 import { updateNameUseCase } from '../../../use-cases/users/update-name.use-case';
+import { verifyEmailUseCase } from '../../../use-cases/users/verify-email.use-case';
 import { ChangePasswordController } from './auth/change-password.controller';
 import { LoginWithAuth0Controller } from './auth/login-with-auth0.controller';
 import { LoginController } from './auth/login.controller';
@@ -16,6 +17,7 @@ import { GetCurrentUserDetailController } from './users/get-current-user-detail.
 import { GetUserListController } from './users/get-user-list.controller';
 import { GetUserStatisticController } from './users/get-user-statistic.controller';
 import { UpdateCurrentUserNameController } from './users/update-current-user-name.controller';
+import { VerifyEmailController } from './users/verify-email.controller';
 
 // auth
 export const registerWithAuth0Controller = new RegisterWithAuth0Controller(
@@ -40,4 +42,7 @@ export const updateCurrentUserNameController =
   new UpdateCurrentUserNameController(updateNameUseCase);
 export const getUserStatisticController = new GetUserStatisticController(
   getUserStatisticUseCase
+);
+export const verifyEmailController = new VerifyEmailController(
+  verifyEmailUseCase
 );

@@ -39,6 +39,8 @@ export class VerifyEmailUseCase
 
       if (!user) return new NotFoundError(User.name, payload.email);
 
+      if (user.isEmailVerified) return new InvalidAccessTokenError();
+
       user.verifyEmail();
 
       await this.usersRepository.save(user);

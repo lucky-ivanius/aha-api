@@ -6,6 +6,7 @@ import {
   RegisterRequest,
   RegisterUseCase,
 } from '../../../../../application/use-cases/users/register.use-case';
+import { appConfig } from '../../../../config/app.config';
 import { Controller } from '../../common/controller';
 
 export class RegisterController extends Controller {
@@ -46,7 +47,7 @@ export class RegisterController extends Controller {
         name: dtoResult.data.name,
         email: dtoResult.data.email,
         password: dtoResult.data.password,
-        verifyUrl: req.hostname,
+        verifyUrl: appConfig.url,
       };
 
       const result = await this.registerUseCase.execute(registerRequest);

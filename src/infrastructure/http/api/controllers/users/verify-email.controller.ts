@@ -42,7 +42,9 @@ export class VerifyEmailController extends Controller {
 
       if (!result.isSuccess) return Controller.badRequest(res, result.error);
 
-      return Controller.ok(res, result.data);
+      return Controller.ok(res, {
+        message: 'Email verified sucessfully',
+      });
     } catch (err) {
       Controller.unexpectedError(res, err);
     }
