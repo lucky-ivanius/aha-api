@@ -1,0 +1,13 @@
+summary: Login with Auth0 token
+tags:
+  - 'Authentication'
+description: Login using an Auth0 token.
+security:
+  - bearerAuth: []
+responses:
+  '200':
+    description: User logged in successfully
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/schemas/token.yaml'

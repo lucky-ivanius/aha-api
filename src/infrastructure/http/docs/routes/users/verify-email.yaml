@@ -1,0 +1,16 @@
+summary: Verify user's email with a token
+tags:
+  - 'Verification'
+description: Verify a user's email with a token.
+parameters:
+  - in: query
+    name: token
+    required: true
+    schema:
+      type: string
+    description: Verification token
+responses:
+  '200':
+    description: Email verification successful
+  '400':
+    $ref: '../../components/responses/bad-request.yaml'

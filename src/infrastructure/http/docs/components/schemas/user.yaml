@@ -1,0 +1,18 @@
+type: object
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  email:
+    type: string
+  isEmailVerified:
+    type: boolean
+  createdAt:
+    type: string
+  loginCount:
+    type: number
+  lastSession:
+    type: string
+  allowChangePassword:
+    type: boolean

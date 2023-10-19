@@ -1,0 +1,22 @@
+summary: Update current user details
+tags:
+  - 'User'
+description: Update details of the currently authenticated user.
+security:
+  - bearerAuth: []
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          name:
+            type: string
+responses:
+  '200':
+    description: User details updated successfully
+  '400':
+    $ref: '../../components/responses/bad-request.yaml'
+  '401':
+    $ref: '../../components/responses/unauthorized.yaml'

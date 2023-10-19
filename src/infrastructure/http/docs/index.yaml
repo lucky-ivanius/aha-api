@@ -1,0 +1,67 @@
+openapi: 3.0.3
+
+info:
+  title: Simple Dashboard - OpenAPI 3.0
+  contact:
+    email: luckzivanius@gmail.com
+  version: 0.0.0
+
+servers:
+  - url: 'http://localhost:3001/api/v1'
+    description: Local Development Server
+  - url: 'https://staging.example.com/api/v1'
+    description: Staging Server
+  - url: 'https://api.example.com/api/v1'
+    description: Production Server
+
+tags:
+  - name: User
+  - name: Authentication
+  - name: Verification
+
+components:
+  schemas:
+    Error:
+      $ref: components/schemas/error.yaml
+
+    Paginated:
+      $ref: components/schemas/paginated.yaml
+
+    User:
+      $ref: components/schemas/user.yaml
+
+    UserStatistic:
+      $ref: components/schemas/user-statistic.yaml
+
+    Token:
+      $ref: components/schemas/token.yaml
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  /users:
+    $ref: routes/users.yaml#/root
+  /users/me:
+    $ref: routes/users.yaml#/me
+  /users/stats:
+    $ref: routes/users.yaml#/stats
+
+  /users/verify:
+    $ref: routes/users.yaml#/verify
+
+  /auth/login:
+    $ref: routes/auth.yaml#/login
+  /auth/login/auth0:
+    $ref: routes/auth.yaml#/login-with-auth0
+
+  /auth/register:
+    $ref: routes/auth.yaml#/register
+  /auth/register/auth0:
+    $ref: routes/auth.yaml#/register-with-auth0
+
+  /auth/change-password:
+    $ref: routes/auth.yaml#/change-password

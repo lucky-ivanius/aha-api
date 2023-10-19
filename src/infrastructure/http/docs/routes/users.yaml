@@ -1,0 +1,14 @@
+root:
+  get:
+    $ref: users/get-users.yaml
+me:
+  get:
+    $ref: users/get-current-user.yaml
+  patch:
+    $ref: users/update-current-user.yaml
+stats:
+  get:
+    $ref: users/get-user-statistic.yaml
+verify:
+  get:
+    $ref: users/verify-email.yaml

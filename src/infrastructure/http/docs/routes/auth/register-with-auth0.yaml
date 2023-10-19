@@ -1,0 +1,13 @@
+summary: Register with Auth0 token
+tags:
+  - 'Authentication'
+description: Register using an Auth0 token.
+security:
+  - bearerAuth: []
+responses:
+  '201':
+    description: User logged in successfully
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/schemas/token.yaml'

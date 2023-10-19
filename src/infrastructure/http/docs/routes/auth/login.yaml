@@ -1,0 +1,25 @@
+summary: Login with credentials
+tags:
+  - 'Authentication'
+description: Login using email and password.
+requestBody:
+  required: true
+  content:
+    application/json:
+      schema:
+        type: object
+        required:
+          - email
+          - password
+        properties:
+          email:
+            type: string
+          password:
+            type: string
+responses:
+  '200':
+    description: User logged in successfully
+    content:
+      application/json:
+        schema:
+          $ref: '../../components/schemas/token.yaml'

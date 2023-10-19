@@ -1,0 +1,8 @@
+type: object
+properties:
+  totalUsers:
+    type: number
+  todaySession:
+    type: number
+  avg7DaysSession:
+    type: number
