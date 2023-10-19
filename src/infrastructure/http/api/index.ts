@@ -20,7 +20,13 @@ app
   .use(cors(corsOptions))
   .use(compression())
   .use(helmet())
-  .use(morgan('dev'));
+  .use(morgan('dev'))
+  .use(express.static(__dirname))
+  .use('*.css', (req, res, next) => {
+    res.set('Content-Type', 'text/css');
+
+    next();
+  });
 
 app.get('/', (req, res) => {
   return res.json({ message: 'Hi 💕' });
