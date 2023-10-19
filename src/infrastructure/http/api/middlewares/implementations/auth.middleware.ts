@@ -9,7 +9,7 @@ export interface AuthContext {
   userId: string;
 }
 
-declare module 'express' {
+declare module 'express-serve-static-core' {
   interface Request {
     auth?: AuthContext;
   }
