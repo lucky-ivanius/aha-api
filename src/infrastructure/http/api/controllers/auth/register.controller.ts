@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Request, Response } from 'express-serve-static-core';
 import { z } from 'zod';
 import { EmailAlreadyExistsError } from '../../../../../application/errors/users/email-already-exists.error';
 import { InvalidAccessTokenError } from '../../../../../application/errors/users/invalid-access-token.error';
@@ -46,6 +46,7 @@ export class RegisterController extends Controller {
         name: dtoResult.data.name,
         email: dtoResult.data.email,
         password: dtoResult.data.password,
+        verifyUrl: req.hostname,
       };
 
       const result = await this.registerUseCase.execute(registerRequest);

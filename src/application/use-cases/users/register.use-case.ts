@@ -73,7 +73,11 @@ export class RegisterUseCase
       this.emailService.sendWithTemplate(
         userResult.data.email.value,
         'verifyEmail',
-        { name: userResult.data.name.value, url: verifyToken }
+        {
+          name: userResult.data.name.value,
+          url: data.verifyUrl,
+          token: verifyToken,
+        }
       );
 
       return Result.ok();
