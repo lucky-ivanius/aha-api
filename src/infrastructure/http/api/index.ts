@@ -27,7 +27,9 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/v1', v1);
-app.use('/api/docs', swaggerServe, swaggerSetup);
+
+app.use('/api/docs', swaggerServe);
+app.get('/api/docs', swaggerSetup);
 
 const port = apiConfig.port;
 
