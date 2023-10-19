@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon",
     "start": "node dist/index",
-    "build": "rimraf ./dist && tsc",
+    "build": "rimraf ./dist && prisma generate && tsc",
     "lint": "eslint src --ext .ts",
     "lint:fix": "eslint src --ext .ts --fix",
     "format": "prettier src --write",
