@@ -11,7 +11,7 @@ servers:
     description: Production Server
     variables:
       url:
-        default: 'https://aha-api-kappa.vercel.app/'
+        default: 'aha-api-kappa.vercel.app'
         description: Production URL
   - url: 'http://localhost:${port}/api/v1'
     description: Local Development Server
