@@ -54,8 +54,8 @@ dependencies:
     specifier: ^6.9.6
     version: 6.9.6
   swagger-ui-express:
-    specifier: ^5.0.0
-    version: 5.0.0(express@4.18.2)
+    specifier: ^4.3.0
+    version: 4.3.0(express@4.18.2)
   uuid:
     specifier: ^9.0.1
     version: 9.0.1
@@ -5486,11 +5486,11 @@ packages:
     resolution: {integrity: sha512-NUHSYoe5XRTk/Are8jPJ6phzBh3l9l33nEyXosM17QInoV95/jng8+PuSGtbD407QoPf93MH3Bkh773OgesJpA==}
     dev: false
 
-  /swagger-ui-express@5.0.0(express@4.18.2):
-    resolution: {integrity: sha512-tsU9tODVvhyfkNSvf03E6FAk+z+5cU3lXAzMy6Pv4av2Gt2xA0++fogwC4qo19XuFf6hdxevPuVCSKFuMHJhFA==}
+  /swagger-ui-express@4.3.0(express@4.18.2):
+    resolution: {integrity: sha512-jN46SEEe9EoXa3ZgZoKgnSF6z0w3tnM1yqhO4Y+Q4iZVc8JOQB960EZpIAz6rNROrDApVDwcMHR0mhlnc/5Omw==}
     engines: {node: '>= v0.10.32'}
     peerDependencies:
-      express: '>=4.0.0 || >=5.0.0-beta'
+      express: '>=4.0.0'
     dependencies:
       express: 4.18.2
       swagger-ui-dist: 5.9.0
