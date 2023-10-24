@@ -6,8 +6,6 @@ import { Result } from '../../common/result';
 export interface SessionProps {
   userId: Id;
   token: string;
-  expiryDate: Date;
-  isActive?: boolean;
 }
 
 export class Session implements Model<SessionProps> {
@@ -17,15 +15,6 @@ export class Session implements Model<SessionProps> {
 
   get token() {
     return this.props.token;
-  }
-
-  get expiryDate() {
-    return this.props.expiryDate;
-  }
-
-  get isActive() {
-    const now = new Date();
-    return this.expiryDate >= now;
   }
 
   private constructor(
@@ -42,16 +31,8 @@ export class Session implements Model<SessionProps> {
       name: 'Token',
       value: props.token,
     });
-    const expiryDateGuard = Guard.required({
-      name: 'Expired date',
-      value: props.expiryDate,
-    });
 
-    const propsResult = Result.combine(
-      userIdGuard,
-      tokenGuard,
-      expiryDateGuard
-    );
+    const propsResult = Result.combine(userIdGuard, tokenGuard);
     if (!propsResult.isSuccess) return Result.fail(propsResult.error);
 
     return Result.ok(new Session(props, id ?? new Id()));

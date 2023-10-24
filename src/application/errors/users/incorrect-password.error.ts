@@ -1,5 +1,5 @@
 import { Result } from '../../../domain/common/result';
-import { UseCaseError } from '../../common/use-case';
+import { UseCaseError } from '../../common/errors';
 
 export class IncorrectPasswordError extends Result<UseCaseError> {
   constructor() {

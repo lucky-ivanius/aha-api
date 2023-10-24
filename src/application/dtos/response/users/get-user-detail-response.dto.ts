@@ -1,7 +1,3 @@
-export interface GetUserDetailResponseDto {
-  id: string;
-  name: string;
-  email: string;
-  isEmailVerified: boolean;
-  allowChangePassword: boolean;
-}
+import { UserDetailDto } from '../../transforms/users/user-detail.dto';
+
+export type GetUserDetailResponseDto = UserDetailDto;

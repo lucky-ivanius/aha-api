@@ -29,10 +29,9 @@ export class GetUserDetailUseCase
         name: user.name.value,
         email: user.email.value,
         isEmailVerified: user.isEmailVerified,
-        allowChangePassword: !!(
-          user.password ||
-          (user.identityProvider && user.identityProvider.allowChangePassword)
-        ),
+        loginCount: user.loginCount,
+        lastSession: user.lastSession?.getTime() ?? null,
+        createdAt: user.createdAt.getTime(),
       };
 
       return Result.ok(result);

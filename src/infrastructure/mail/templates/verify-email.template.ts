@@ -1,6 +1,6 @@
-import { MailTemplate } from '../../../domain/services/email.service';
+import { MailTemplate } from '../../../application/services/mail.service';
 
 export const verifyEmailTemplate: MailTemplate = {
   subject: 'Hi, {{name}}',
-  body: 'Verify: {{url}}/api/v1/users/verify?token={{token}}',
+  body: 'Verify: {{verifyEndpoint}}?token={{token}}',
 };

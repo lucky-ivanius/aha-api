@@ -1,0 +1,14 @@
+type: object
+properties:
+  id:
+    type: string
+  name:
+    type: string
+  email:
+    type: string
+  createdAt:
+    type: string
+  loginCount:
+    type: number
+  lastSession:
+    type: string

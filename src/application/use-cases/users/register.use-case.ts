@@ -4,16 +4,14 @@ import { Name } from '../../../domain/models/user/name';
 import { Password } from '../../../domain/models/user/password';
 import { User } from '../../../domain/models/user/user';
 import { UsersRepository } from '../../../domain/repositories/users.repository';
-import { EmailService } from '../../../domain/services/email.service';
-import { HashingService } from '../../../domain/services/hashing.service';
-import {
-  TokenService,
-  VerifyEmailPayload,
-} from '../../../domain/services/token.service';
 import { UnexpectedError } from '../../common/errors';
 import { UseCase } from '../../common/use-case';
 import { RegisterRequestDto } from '../../dtos/request/users/register-request.dto';
+import { VerifyEmailDto } from '../../dtos/views/emails/verify-email.dto';
 import { EmailAlreadyExistsError } from '../../errors/users/email-already-exists.error';
+import { HashingService } from '../../services/hashing.service';
+import { MailService } from '../../services/mail.service';
+import { TokenService, VerifyEmailPayload } from '../../services/token.service';
 
 export type RegisterRequest = RegisterRequestDto;
 
@@ -29,7 +27,7 @@ export class RegisterUseCase
     private readonly usersRepository: UsersRepository,
     private readonly hashingService: HashingService,
     private readonly tokenService: TokenService,
-    private readonly emailService: EmailService
+    private readonly emailService: MailService
   ) {}
 
   async execute(data: RegisterRequest): Promise<RegisterResponse> {
@@ -64,25 +62,23 @@ export class RegisterUseCase
       const verifyEmailPayload: VerifyEmailPayload = {
         sub: userResult.data.id.toString(),
         email: userResult.data.email.value,
-        isEmailVerified: false,
         type: 'verify_email',
       };
 
       const verifyToken = this.tokenService.sign(verifyEmailPayload);
 
-      await this.emailService.sendWithTemplate(
-        userResult.data.email.value,
-        'verifyEmail',
-        {
+      await this.emailService.sendWithTemplate<VerifyEmailDto>({
+        to: userResult.data.email.value,
+        template: 'VERIFY_EMAIL',
+        args: {
           name: userResult.data.name.value,
-          url: data.verifyUrl,
           token: verifyToken,
-        }
-      );
+          verifyEndpoint: data.verifyEndpoint,
+        },
+      });
 
       return Result.ok();
     } catch (err) {
-      console.log(err);
       return new UnexpectedError(err);
     }
   }

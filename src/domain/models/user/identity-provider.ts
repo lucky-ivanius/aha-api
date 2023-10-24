@@ -1,13 +1,15 @@
 import { Guard } from '../../common/guard';
 import { Result } from '../../common/result';
 
-export interface IdentityProviderProps {
+export interface IdentityProviderProps<MetadataType> {
   provider: string;
   identifier: string;
-  allowChangePassword: boolean;
+  metadata: MetadataType;
 }
 
-export class IdentityProvider implements IdentityProviderProps {
+export class IdentityProvider<MetadataType>
+  implements IdentityProviderProps<MetadataType>
+{
   get provider() {
     return this.props.provider;
   }
@@ -16,17 +18,19 @@ export class IdentityProvider implements IdentityProviderProps {
     return this.props.identifier;
   }
 
-  get allowChangePassword() {
-    return this.props.allowChangePassword;
+  get metadata() {
+    return this.props.metadata;
   }
 
-  private constructor(private readonly props: IdentityProviderProps) {}
+  private constructor(
+    private readonly props: IdentityProviderProps<MetadataType>
+  ) {}
 
-  static create(
+  static create<MetadataType>(
     provider: string,
     identifier: string,
-    allowChangePassword?: boolean
-  ): Result<IdentityProvider> {
+    metadata?: MetadataType
+  ): Result<IdentityProvider<MetadataType>> {
     const providerRequiredGuard = Guard.required({
       name: 'Provider',
       value: provider,
@@ -43,10 +47,10 @@ export class IdentityProvider implements IdentityProviderProps {
     if (!guardResult.isSuccess) return Result.fail(guardResult.error);
 
     return Result.ok(
-      new IdentityProvider({
+      new IdentityProvider<MetadataType>({
         provider,
         identifier,
-        allowChangePassword: allowChangePassword ?? false,
+        metadata: metadata ?? ({} as MetadataType),
       })
     );
   }

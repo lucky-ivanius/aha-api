@@ -30,7 +30,7 @@ export class GetUserStatisticUseCase
         new Id(data.requestUserId)
       );
 
-      if (isUserVerified) return new AccessDeniedError();
+      if (!isUserVerified) return new AccessDeniedError();
 
       const now = new Date();
       const sub7Days = subDays(now, 7);

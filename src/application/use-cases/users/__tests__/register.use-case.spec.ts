@@ -1,6 +1,6 @@
 import { getUsersRepositoryMock } from '../../../../__mocks__/repositories/users-repository.mock';
-import { getEmailServiceMock } from '../../../../__mocks__/services/email-service.mock';
 import { getHashingServiceMock } from '../../../../__mocks__/services/hashing-service.mock';
+import { getMailServiceMock } from '../../../../__mocks__/services/mail-service.mock';
 import { getTokenServiceMock } from '../../../../__mocks__/services/token-service.mock';
 import { Email } from '../../../../domain/models/user/email';
 import { Name } from '../../../../domain/models/user/name';
@@ -33,7 +33,7 @@ describe('use-cases:users - Register (Use Case)', () => {
 
     const tokenServiceMock = getTokenServiceMock();
 
-    const emailServiceMock = getEmailServiceMock();
+    const emailServiceMock = getMailServiceMock();
 
     const registerUseCase = new RegisterUseCase(
       usersRepositoryMock,
@@ -46,6 +46,7 @@ describe('use-cases:users - Register (Use Case)', () => {
       name: 'user',
       email: 'abc@def.com',
       password: 'Str0ngP@ssword',
+      verifyEndpoint: 'http://localhost/api/v1/verify',
     };
 
     const result = await registerUseCase.execute(registerRequest);
@@ -71,7 +72,7 @@ describe('use-cases:users - Register (Use Case)', () => {
 
     const tokenServiceMock = getTokenServiceMock();
 
-    const emailServiceMock = getEmailServiceMock();
+    const emailServiceMock = getMailServiceMock();
 
     const registerUseCase = new RegisterUseCase(
       usersRepositoryMock,
@@ -84,6 +85,7 @@ describe('use-cases:users - Register (Use Case)', () => {
       name: 'user',
       email: 'abc@def.com',
       password: 'Str0ngP@ssword',
+      verifyEndpoint: 'http://localhost/api/v1/verify',
     };
 
     const result = await registerUseCase.execute(registerRequest);

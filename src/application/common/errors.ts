@@ -1,15 +1,24 @@
 import { Result } from '../../domain/common/result';
-import { UseCaseError } from './use-case';
+
+export type UseCaseError =
+  | {
+      [key: string]: unknown;
+    }
+  | unknown;
 
 export class UnexpectedError extends Result<UseCaseError> {
   constructor(err: unknown) {
+    console.error(err);
     super(false, 'An unexpected error occured', err as UseCaseError);
   }
 }
 
 export class NotFoundError extends Result<UseCaseError> {
-  constructor(model: string, arg: unknown) {
-    super(false, `${model} (${arg}) was not found`);
+  constructor(model: string, arg?: unknown) {
+    super(
+      false,
+      !!arg ? `${model} (${arg}) was not found` : `${model} was not found`
+    );
   }
 }
 

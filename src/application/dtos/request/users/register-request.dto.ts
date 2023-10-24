@@ -2,5 +2,5 @@ export interface RegisterRequestDto {
   name: string;
   email: string;
   password: string;
-  verifyUrl: string;
+  verifyEndpoint: string;
 }

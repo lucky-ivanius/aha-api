@@ -15,7 +15,7 @@ export type UserProps = {
   loginCount: number;
   lastLogin?: Date;
   lastSession?: Date;
-  identityProvider?: IdentityProvider;
+  provider?: IdentityProvider<unknown>;
   createdAt: Date;
 };
 
@@ -48,8 +48,8 @@ export class User implements Model<UserProps> {
     return this.props.lastSession;
   }
 
-  get identityProvider() {
-    return this.props.identityProvider;
+  get provider() {
+    return this.props.provider;
   }
 
   get createdAt() {
@@ -67,11 +67,6 @@ export class User implements Model<UserProps> {
 
     const guardResult = Result.combine(nameGuard, emailGuard);
     if (!guardResult.isSuccess) return Result.fail(guardResult.error);
-
-    if (props.password && props.identityProvider)
-      return Result.fail(
-        'Please choose either a password or an identity provider'
-      );
 
     const user = new User(props, id ?? new Id());
 

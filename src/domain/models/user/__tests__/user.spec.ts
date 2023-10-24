@@ -11,57 +11,28 @@ describe('models:user - User (Model)', () => {
     email: Email.create('valid@email.com').data,
     isEmailVerified: false,
     loginCount: 0,
+    password: Password.create('this-is-hashed-password', true).data,
+    provider: IdentityProvider.create('google', '12345').data,
     createdAt: now,
   };
-
-  let userWithPassword: UserProps;
-  let userWithIdentityProvider: UserProps;
 
   let user: User;
 
   beforeEach(() => {
-    userWithPassword = {
-      ...userProps,
-      password: Password.create('this-is-hashed-password', true).data,
-    };
-
-    userWithIdentityProvider = {
-      ...userProps,
-      identityProvider: IdentityProvider.create('google', '12345').data,
-    };
-
     user = User.create(userProps).data;
   });
 
   describe('create', () => {
-    it('should pass for a valid user with password', () => {
-      const result = User.create(userWithPassword);
+    it('should pass for a valid user', () => {
+      const result = User.create(user);
 
       expect(result.isSuccess).toBeTruthy();
       expect(result.data).toBeInstanceOf(User);
-      expect(result.data.name).toEqual(userWithPassword.name);
-      expect(result.data.email).toEqual(userWithPassword.email);
-      expect(result.data.isEmailVerified).toEqual(
-        userWithPassword.isEmailVerified
-      );
-      expect(result.data.password).toEqual(userWithPassword.password);
-      expect(result.data.identityProvider).toBeUndefined();
-    });
-
-    it('should pass for a valid user with identity provider', () => {
-      const result = User.create(userWithIdentityProvider);
-
-      expect(result.isSuccess).toBeTruthy();
-      expect(result.data).toBeInstanceOf(User);
-      expect(result.data.name).toEqual(userWithIdentityProvider.name);
-      expect(result.data.email).toEqual(userWithIdentityProvider.email);
-      expect(result.data.isEmailVerified).toEqual(
-        userWithIdentityProvider.isEmailVerified
-      );
-      expect(result.data.password).toBeUndefined();
-      expect(result.data.identityProvider).toEqual(
-        userWithIdentityProvider.identityProvider
-      );
+      expect(result.data.name).toEqual(user.name);
+      expect(result.data.email).toEqual(user.email);
+      expect(result.data.isEmailVerified).toEqual(user.isEmailVerified);
+      expect(result.data.password).toEqual(user.password);
+      expect(result.data.provider).toEqual(user.provider);
     });
 
     it('should fail for an empty name', () => {

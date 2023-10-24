@@ -1,5 +1,5 @@
-export interface GetUserListRequestDto {
+import { PaginationRequest } from '../../../common/pagination';
+
+export interface GetUserListRequestDto extends PaginationRequest {
   requestUserId: string;
-  page?: number;
-  pageSize?: number;
 }

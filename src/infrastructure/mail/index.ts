@@ -1,6 +1,6 @@
-import { MailTemplates } from '../../domain/services/email.service';
+import { EmailTemplates } from '../../application/services/mail.service';
 import { verifyEmailTemplate } from './templates/verify-email.template';
 
-export const mailTemplates: MailTemplates = {
-  verifyEmail: verifyEmailTemplate,
+export const emailTemplates: EmailTemplates = {
+  VERIFY_EMAIL: verifyEmailTemplate,
 };

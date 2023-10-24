@@ -1,12 +1,4 @@
-import { PaginationResponseDto } from '../common/pagination-response.dto';
+import { PaginationResult } from '../../../common/pagination';
+import { UserDto } from '../../transforms/users/user.dto';
 
-interface UserDto {
-  id: string;
-  name: string;
-  email: string;
-  createdAt: Date;
-  loginCount: number;
-  lastSession?: Date;
-}
-
-export type GetUserListResponseDto = PaginationResponseDto<UserDto>;
+export interface GetUserListResponseDto extends PaginationResult<UserDto> {}

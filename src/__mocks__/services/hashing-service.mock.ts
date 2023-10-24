@@ -1,4 +1,4 @@
-import { HashingService } from '../../domain/services/hashing.service';
+import { HashingService } from '../../application/services/hashing.service';
 
 export function getHashingServiceMock(
   custom?: Partial<HashingService>

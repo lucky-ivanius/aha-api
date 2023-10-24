@@ -1,0 +1,9 @@
+login:
+  post:
+    $ref: auth/login.yaml
+login-with-auth0:
+  post:
+    $ref: auth/login-with-auth0.yaml
+register:
+  post:
+    $ref: auth/register.yaml

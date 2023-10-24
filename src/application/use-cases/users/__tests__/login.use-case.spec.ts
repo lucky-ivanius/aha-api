@@ -3,18 +3,18 @@ import { getUsersRepositoryMock } from '../../../../__mocks__/repositories/users
 import { getHashingServiceMock } from '../../../../__mocks__/services/hashing-service.mock';
 import { getTokenServiceMock } from '../../../../__mocks__/services/token-service.mock';
 import { Email } from '../../../../domain/models/user/email';
-import { IdentityProvider } from '../../../../domain/models/user/identity-provider';
 import { Name } from '../../../../domain/models/user/name';
 import { Password } from '../../../../domain/models/user/password';
 import { User } from '../../../../domain/models/user/user';
-import { AccessPayload } from '../../../../domain/services/token.service';
 import { InvalidCredentialError } from '../../../errors/users/invalid-credential.error';
-import { UserRegisteredWithIdProviderError } from '../../../errors/users/user-registered-with-id-provider.error';
+import { AccessPayload } from '../../../services/token.service';
 import { LoginRequest, LoginUseCase } from '../login.use-case';
 
 describe('use-cases:users - Login (Use Case)', () => {
   let user: User;
-  let userWithIdProvider: User;
+  let userWithNoPassword: User;
+  let accessPayload: AccessPayload;
+  let token: string;
 
   beforeEach(() => {
     const now = new Date();
@@ -26,14 +26,18 @@ describe('use-cases:users - Login (Use Case)', () => {
       loginCount: 0,
       createdAt: now,
     }).data;
-    userWithIdProvider = User.create({
+    userWithNoPassword = User.create({
       name: Name.create('name').data,
       email: Email.create('valid@email.com').data,
       isEmailVerified: true,
-      identityProvider: IdentityProvider.create('auth0', '2134').data,
       loginCount: 0,
       createdAt: now,
     }).data;
+    accessPayload = {
+      sub: user.id.toString(),
+      type: 'access',
+    };
+    token = '1234';
   });
 
   it('should login successfully', async () => {
@@ -44,12 +48,8 @@ describe('use-cases:users - Login (Use Case)', () => {
     const sessionsRepositoryMock = getSessionsRepositoryMock();
 
     const tokenServiceMock = getTokenServiceMock({
-      verify: jest.fn().mockResolvedValue({
-        sub: user.id.toString(),
-        email: user.email.value,
-        isEmailVerified: user.isEmailVerified,
-        type: 'access',
-      } as AccessPayload),
+      sign: jest.fn().mockReturnValue(token),
+      verify: jest.fn().mockResolvedValue(accessPayload),
     });
 
     const hashingServiceMock = getHashingServiceMock({
@@ -77,6 +77,9 @@ describe('use-cases:users - Login (Use Case)', () => {
     expect(tokenServiceMock.sign).toHaveBeenCalledTimes(1);
 
     expect(result.isSuccess).toBeTruthy();
+    expect(result.data).toEqual({
+      accessToken: token,
+    });
   });
 
   it('should fail if user was not found', async () => {
@@ -114,9 +117,9 @@ describe('use-cases:users - Login (Use Case)', () => {
     expect(result.isSuccess).toBeFalsy();
   });
 
-  it('should fail for user registered under identity provider', async () => {
+  it('should fail for user has no password authentication', async () => {
     const usersRepositoryMock = getUsersRepositoryMock({
-      findByEmail: jest.fn().mockResolvedValue(userWithIdProvider),
+      findByEmail: jest.fn().mockResolvedValue(userWithNoPassword),
     });
 
     const sessionsRepositoryMock = getSessionsRepositoryMock();
@@ -145,7 +148,7 @@ describe('use-cases:users - Login (Use Case)', () => {
     expect(hashingServiceMock.compare).not.toHaveBeenCalled();
     expect(tokenServiceMock.sign).not.toHaveBeenCalled();
 
-    expect(result).toBeInstanceOf(UserRegisteredWithIdProviderError);
+    expect(result).toBeInstanceOf(InvalidCredentialError);
     expect(result.isSuccess).toBeFalsy();
   });
 
