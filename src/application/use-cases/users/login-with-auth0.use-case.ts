@@ -7,6 +7,7 @@ import { UseCase } from '../../common/use-case';
 import { LoginWithAuth0RequestDto } from '../../dtos/request/users/login-with-auth0-request.dto';
 import { InvalidAccessTokenError } from '../../errors/users/invalid-access-token.error';
 import { ExternalAuthService } from '../../services/external-auth.service';
+import { TokenService } from '../../services/token.service';
 
 export type LoginWithAuth0Request = LoginWithAuth0RequestDto;
 
@@ -18,14 +19,17 @@ export class LoginWithAuth0UseCase
   constructor(
     private readonly usersRepository: UsersRepository,
     private readonly sessionsRepository: SessionsRepository,
+    private readonly tokenService: TokenService,
     private readonly auth0Service: ExternalAuthService
   ) {}
 
   async execute(data: LoginWithAuth0Request): Promise<LoginWithAuth0Response> {
     try {
-      const auth0User = await this.auth0Service.getUserByToken(
-        data.accessToken
-      );
+      const auth0Payload = await this.tokenService.verify(data.accessToken);
+
+      if (!auth0Payload) return new InvalidAccessTokenError();
+
+      const auth0User = await this.auth0Service.getUserById(auth0Payload.sub);
 
       if (!auth0User) return new InvalidAccessTokenError();
 
