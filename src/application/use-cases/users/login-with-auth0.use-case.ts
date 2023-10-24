@@ -27,8 +27,6 @@ export class LoginWithAuth0UseCase
         data.accessToken
       );
 
-      console.log('login with auth0 use case', { auth0User });
-
       if (!auth0User) return new InvalidAccessTokenError();
 
       const user = await this.usersRepository.findByEmail(

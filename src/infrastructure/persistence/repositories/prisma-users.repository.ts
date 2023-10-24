@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { Id } from '../../../domain/common/id';
 import { Email } from '../../../domain/models/user/email';
 import { IdentityProvider } from '../../../domain/models/user/identity-provider';
@@ -7,28 +7,18 @@ import { Password } from '../../../domain/models/user/password';
 import { User } from '../../../domain/models/user/user';
 import { UsersRepository } from '../../../domain/repositories/users.repository';
 
+type PrismaUser = Prisma.UserGetPayload<{
+  include: {
+    provider: true;
+    sessions: true;
+  };
+}>;
+
 export class PrismaUsersRepository implements UsersRepository {
   constructor(private readonly prisma: PrismaClient) {}
 
-  async findByEmail(email: string): Promise<User | null> {
-    const user = await this.prisma.user.findUnique({
-      include: {
-        provider: true,
-        sessions: {
-          take: 1,
-          orderBy: {
-            createdAt: 'desc',
-          },
-        },
-      },
-      where: {
-        email,
-      },
-    });
-
-    if (!user) return null;
-
-    const userResult = User.create(
+  private mapUser(user: PrismaUser): User {
+    return User.create(
       {
         name: Name.create(user.name).data,
         email: Email.create(user.email).data,
@@ -52,9 +42,30 @@ export class PrismaUsersRepository implements UsersRepository {
         }),
       },
       new Id(user.id)
-    );
+    ).data;
+  }
 
-    return userResult.data;
+  async findByEmail(email: string): Promise<User | null> {
+    const user = await this.prisma.user.findUnique({
+      include: {
+        provider: true,
+        sessions: {
+          take: 1,
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
+      },
+      where: {
+        email,
+      },
+    });
+
+    if (!user) return null;
+
+    const userResult = this.mapUser(user);
+
+    return userResult;
   }
 
   async findById(id: Id): Promise<User | null> {
@@ -75,33 +86,38 @@ export class PrismaUsersRepository implements UsersRepository {
 
     if (!user) return null;
 
-    const userResult = User.create(
-      {
-        name: Name.create(user.name).data,
-        email: Email.create(user.email).data,
-        isEmailVerified: user.isEmailVerified,
-        loginCount: user.loginCount,
-        createdAt: user.createdAt,
-        ...(user.password && {
-          password: Password.create(user.password, true).data,
-        }),
-        ...(user.provider && {
-          provider: IdentityProvider.create(
-            user.provider.provider,
-            user.provider.identifier
-          ).data,
-        }),
-        ...(user.lastLogin && {
-          lastLogin: user.lastLogin,
-        }),
-        ...(user.sessions.length > 0 && {
-          lastSession: user.sessions.at(0)?.createdAt,
-        }),
-      },
-      new Id(user.id)
-    );
+    const userResult = this.mapUser(user);
 
-    return userResult.data;
+    return userResult;
+  }
+
+  async findByProvider(
+    provider: string,
+    identifier: string
+  ): Promise<User | null> {
+    const user = await this.prisma.user.findFirst({
+      include: {
+        provider: true,
+        sessions: {
+          take: 1,
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
+      },
+      where: {
+        provider: {
+          provider,
+          identifier,
+        },
+      },
+    });
+
+    if (!user) return null;
+
+    const userResult = this.mapUser(user);
+
+    return userResult;
   }
 
   async getUserList(page: number, pageSize: number): Promise<User[]> {
@@ -119,34 +135,7 @@ export class PrismaUsersRepository implements UsersRepository {
       skip: (page - 1) * pageSize,
     });
 
-    return users.map(
-      (user) =>
-        User.create(
-          {
-            name: Name.create(user.name).data,
-            email: Email.create(user.email).data,
-            isEmailVerified: user.isEmailVerified,
-            loginCount: user.loginCount,
-            createdAt: user.createdAt,
-            ...(user.password && {
-              password: Password.create(user.password, true).data,
-            }),
-            ...(user.provider && {
-              provider: IdentityProvider.create(
-                user.provider.provider,
-                user.provider.identifier
-              ).data,
-            }),
-            ...(user.lastLogin && {
-              lastLogin: user.lastLogin,
-            }),
-            ...(user.sessions.length > 0 && {
-              lastSession: user.sessions.at(0)?.createdAt,
-            }),
-          },
-          new Id(user.id)
-        ).data
-    );
+    return users.map(this.mapUser);
   }
 
   async isUserVerified(userId: Id): Promise<boolean> {

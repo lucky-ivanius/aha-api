@@ -41,8 +41,6 @@ export class Auth0Service implements ExternalAuthService {
         accessToken
       )) as Auth0UserPayload;
 
-      console.log('auth0Service', { user });
-
       if (!user) return null;
 
       const allowChangePassword = user.sub.startsWith('auth0');

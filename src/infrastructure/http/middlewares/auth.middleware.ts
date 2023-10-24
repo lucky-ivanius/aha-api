@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express-serve-static-core';
-import { Session } from '../../../domain/models/session/session';
-import { SessionsRepository } from '../../../domain/repositories/sessions.repository';
+import { Id } from '../../../domain/common/id';
+import { UsersRepository } from '../../../domain/repositories/users.repository';
 import { Auth0JwtService } from '../../services/auth0-jwt.service';
 import { JwtService } from '../../services/jwt.service';
 import { Controller } from '../common/controller';
@@ -20,24 +20,14 @@ declare module 'express-serve-static-core' {
 
 export class AuthMiddleware extends Middleware {
   constructor(
-    private readonly sessionsRepository: SessionsRepository,
+    private readonly usersRepository: UsersRepository,
     private readonly jwtService: JwtService,
     private readonly auth0JwtService: Auth0JwtService
   ) {
     super();
   }
 
-  private setAuthContext(
-    req: Request,
-    session: Session,
-    provider?: string
-  ): void {
-    const context: AuthContext = {
-      userId: session.userId.toString(),
-      token: session.token,
-      provider,
-    };
-
+  private setAuthContext(req: Request, context: AuthContext): void {
     req.auth = context;
   }
 
@@ -48,11 +38,16 @@ export class AuthMiddleware extends Middleware {
       const internalVerify = await this.jwtService.verify(token);
 
       if (internalVerify) {
-        const session = await this.sessionsRepository.getSessionByToken(token);
+        const user = await this.usersRepository.findById(
+          new Id(internalVerify.sub)
+        );
 
-        if (!session) return Controller.unauthorized(res);
+        if (!user) return Controller.unauthorized(res);
 
-        this.setAuthContext(req, session);
+        this.setAuthContext(req, {
+          userId: user.id.toString(),
+          token,
+        });
 
         return next();
       }
@@ -60,11 +55,18 @@ export class AuthMiddleware extends Middleware {
       const auth0Verify = await this.auth0JwtService.verify(token);
 
       if (auth0Verify) {
-        const session = await this.sessionsRepository.getSessionByToken(token);
+        const user = await this.usersRepository.findByProvider(
+          'auth0',
+          auth0Verify.sub
+        );
 
-        if (!session) return Controller.unauthorized(res);
+        if (!user) return Controller.unauthorized(res);
 
-        this.setAuthContext(req, session, 'auth0');
+        this.setAuthContext(req, {
+          userId: user.id.toString(),
+          token,
+          provider: 'auth0',
+        });
 
         return next();
       }

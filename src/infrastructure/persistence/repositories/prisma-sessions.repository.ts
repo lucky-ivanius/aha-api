@@ -1,6 +1,5 @@
 import { PrismaClient } from '@prisma/client';
 import { differenceInDays, endOfDay, startOfDay } from 'date-fns';
-import { Id } from '../../../domain/common/id';
 import { Session } from '../../../domain/models/session/session';
 import { SessionsRepository } from '../../../domain/repositories/sessions.repository';
 
@@ -49,24 +48,6 @@ export class PrismaSessionsRepository implements SessionsRepository {
     });
 
     return sessionCount;
-  }
-
-  async getSessionByToken(token: string): Promise<Session | null> {
-    const session = await this.prisma.session.findFirst({
-      where: {
-        token,
-      },
-    });
-
-    if (!session) return null;
-
-    return Session.create(
-      {
-        userId: new Id(session.userId),
-        token: session.token,
-      },
-      new Id(session.id)
-    ).data;
   }
 
   async save(session: Session): Promise<void> {
