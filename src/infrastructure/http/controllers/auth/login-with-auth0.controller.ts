@@ -25,6 +25,7 @@ export class LoginWithAuth0Controller extends Controller {
       return Controller.badRequest(res, dtoResult.error);
 
     try {
+      console.log('controller', { data: dtoResult.data });
       const loginWithAuth0Request: LoginWithAuth0Request = dtoResult.data;
 
       const result = await this.loginWithAuth0UseCase.execute(
