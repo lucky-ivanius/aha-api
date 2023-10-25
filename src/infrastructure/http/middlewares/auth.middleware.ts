@@ -71,6 +71,12 @@ export class AuthMiddleware extends Middleware {
           await this.usersRepository.save(user);
         }
 
+        if (user.isEmailVerified && !auth0User.isEmailVerified) {
+          auth0User.verifyEmail();
+
+          await this.auth0Service.save(auth0User);
+        }
+
         this.setAuthContext(req, {
           userId: user.id.toString(),
           token,

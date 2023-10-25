@@ -106,6 +106,7 @@ export class Auth0Service implements ExternalAuthService {
       },
       {
         password: user.password?.value,
+        email_verified: user.isEmailVerified,
       }
     );
   }
