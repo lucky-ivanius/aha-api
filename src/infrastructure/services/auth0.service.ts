@@ -16,9 +16,9 @@ export interface Auth0UserPayload extends Payload {
 export class Auth0Service implements ExternalAuthService {
   public readonly providerName = 'auth0';
 
-  private readonly managementClient: ManagementClient;
+  public readonly managementClient: ManagementClient;
 
-  private readonly userInfoClient: UserInfoClient;
+  public readonly userInfoClient: UserInfoClient;
 
   constructor(
     readonly domain: string,
@@ -71,11 +71,12 @@ export class Auth0Service implements ExternalAuthService {
       const userInfoResult = await this.managementClient.users.get({
         id,
       });
+
       if (!userInfoResult.data) return null;
 
       const user = userInfoResult.data;
 
-      const allowChangePassword = user.sub.startsWith('auth0');
+      const allowChangePassword = user.user_id.startsWith('auth0');
 
       const userResult = User.create({
         name: Name.create(user.name).data,
@@ -83,7 +84,7 @@ export class Auth0Service implements ExternalAuthService {
         isEmailVerified: user.email_verified,
         provider: IdentityProvider.create<Auth0Metadata>(
           this.providerName,
-          user.sub,
+          user.user_id,
           {
             allowChangePassword,
           }
