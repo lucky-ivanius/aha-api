@@ -4,9 +4,11 @@ import { changePasswordController } from '../../../../../infrastructure/di/contr
 import { getCurrentUserDetailController } from '../../../../../infrastructure/di/controllers/users/get-current-user-detail.controller';
 import { getUserListController } from '../../../../../infrastructure/di/controllers/users/get-user-list.controller';
 import { getUserStatisticController } from '../../../../../infrastructure/di/controllers/users/get-user-statistic.controller';
+import { sendEmailVerificationController } from '../../../../../infrastructure/di/controllers/users/send-email-verification.controller';
 import { updateCurrentNameController } from '../../../../../infrastructure/di/controllers/users/update-current-name.controller';
 import { verifyEmailController } from '../../../../../infrastructure/di/controllers/users/verify-email.controller';
 import { authMiddleware } from '../../../../../infrastructure/di/middlewares/auth.middleware';
+import { sendEmailVerificationLimit } from '../../../rules/rate-limit/send-email-verification.limit';
 
 const usersRouter = Router();
 
@@ -36,6 +38,13 @@ usersRouter.get(
 
 usersRouter.get('/verify', async (req, res) =>
   verifyEmailController.execute(req, res)
+);
+
+usersRouter.post(
+  '/resend-verification',
+  async (req, res, next) => authMiddleware.execute(req, res, next),
+  async (req, res, next) => sendEmailVerificationLimit(req, res, next),
+  async (req, res) => sendEmailVerificationController.execute(req, res)
 );
 
 usersRouter.put(

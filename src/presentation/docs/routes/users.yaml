@@ -12,6 +12,9 @@ statistic:
 verify:
   get:
     $ref: users/verify-email.yaml
+resend-verification:
+  post:
+    $ref: users/send-email-verification.yaml
 password:
   put:
     $ref: users/change-password.yaml

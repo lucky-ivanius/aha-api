@@ -56,6 +56,8 @@ paths:
   /users/statistic:
     $ref: routes/users.yaml#/statistic
 
+  /users/resend-verification:
+    $ref: routes/users.yaml#/resend-verification
   /users/verify:
     $ref: routes/users.yaml#/verify
 

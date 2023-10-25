@@ -1,0 +1,13 @@
+summary: Send current user email verification
+tags:
+  - 'User'
+description: Send email verification of the currently authenticated user.
+security:
+  - bearerAuth: []
+responses:
+  '200':
+    description: Verification email has been sent
+  '400':
+    $ref: '../../components/responses/bad-request.yaml'
+  '401':
+    $ref: '../../components/responses/unauthorized.yaml'
